@@ -1,13 +1,13 @@
 package de.eeriedaily.namqp.v08.types;
 
+import de.eeriedaily.namqp.v08.AbstractTransmittable;
 import org.jboss.netty.buffer.ChannelBuffer;
 
 /**
  * @author Joern Barthel <joern.barthel@acm.org>
  */
-public class UnsignedInt extends AbstractType {
+public class UnsignedInt extends AbstractTransmittable implements Type {
 
-    public static final Octet IDENTIFIER = new Octet('i');
     public static final long SIZE = 4;
 
     private final long unsignedInt;
@@ -22,11 +22,6 @@ public class UnsignedInt extends AbstractType {
 
     public long getUnsignedInt() {
         return unsignedInt;
-    }
-
-    @Override
-    public Octet getIdentifier() {
-        return IDENTIFIER;
     }
 
     public long getSize() {

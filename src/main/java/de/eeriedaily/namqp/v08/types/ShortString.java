@@ -1,5 +1,6 @@
 package de.eeriedaily.namqp.v08.types;
 
+import de.eeriedaily.namqp.v08.AbstractTransmittable;
 import org.jboss.netty.buffer.ChannelBuffer;
 
 import static java.lang.String.*;
@@ -7,7 +8,7 @@ import static java.lang.String.*;
 /**
  * @author Joern Barthel <joern.barthel@acm.org>
  */
-public class ShortString extends AbstractType {
+public class ShortString extends AbstractTransmittable implements FieldTableValueType {
 
     public static final Octet IDENTIFIER = new Octet('s');
 
@@ -30,8 +31,7 @@ public class ShortString extends AbstractType {
         return string;
     }
 
-    @Override
-    public Octet getIdentifier() {
+    public Octet getType() {
         return IDENTIFIER;
     }
 

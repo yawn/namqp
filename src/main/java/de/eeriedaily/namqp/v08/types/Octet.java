@@ -1,13 +1,13 @@
 package de.eeriedaily.namqp.v08.types;
 
+import de.eeriedaily.namqp.v08.AbstractTransmittable;
 import org.jboss.netty.buffer.ChannelBuffer;
 
 /**
 * @author Joern Barthel <joern.barthel@acm.org>
  */
-public class Octet extends AbstractType {
+public class Octet extends AbstractTransmittable implements Type {
 
-    public static final Octet IDENTIFIER = new Octet('t');
     public static final long SIZE = 1;
 
     private final byte octet;
@@ -27,11 +27,6 @@ public class Octet extends AbstractType {
 
     public Octet(ChannelBuffer channelBuffer) {
         this(channelBuffer.readByte());
-    }
-
-    @Override
-    public Octet getIdentifier() {
-        return IDENTIFIER;
     }
 
     public boolean getBoolean() {

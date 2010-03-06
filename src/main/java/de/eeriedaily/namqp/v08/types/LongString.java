@@ -1,5 +1,6 @@
 package de.eeriedaily.namqp.v08.types;
 
+import de.eeriedaily.namqp.v08.AbstractTransmittable;
 import org.jboss.netty.buffer.ChannelBuffer;
 
 /**
@@ -7,7 +8,7 @@ import org.jboss.netty.buffer.ChannelBuffer;
  *
  * @author Joern Barthel <joern.barthel@acm.org>
  */
-public class LongString extends AbstractType {
+public class LongString extends AbstractTransmittable implements FieldTableValueType {
 
     public static final Octet IDENTIFIER = new Octet('S');
 
@@ -19,11 +20,11 @@ public class LongString extends AbstractType {
 
     public LongString(ChannelBuffer channelBuffer) {
         int size = checkIntOverflow(new UnsignedInt(channelBuffer).getUnsignedInt());
+        System.out.println("size = " + size);
         this.string = channelBuffer.readBytes(size).toString("utf-8");
     }
 
-    @Override
-    public Octet getIdentifier() {
+    public Octet getType() {
         return IDENTIFIER;
     }
 

@@ -1,5 +1,6 @@
 package de.eeriedaily.namqp.v08.types;
 
+import de.eeriedaily.namqp.v08.AbstractTransmittable;
 import org.jboss.netty.buffer.ChannelBuffer;
 
 import java.math.BigInteger;
@@ -7,9 +8,8 @@ import java.math.BigInteger;
 /**
  * @author Joern Barthel <joern.barthel@acm.org>
  */
-public class UnsignedLong extends AbstractType {
+public class UnsignedLong extends AbstractTransmittable implements Type {
 
-    public static final Octet IDENTIFIER = new Octet('l');
     public static final int SIZE = 8;
 
     private final BigInteger unsignedLong;
@@ -33,11 +33,6 @@ public class UnsignedLong extends AbstractType {
 
     public BigInteger getUnsignedLong() {
         return unsignedLong;
-    }
-
-    @Override
-    public Octet getIdentifier() {
-        return IDENTIFIER;
     }
 
     public long getSize() {

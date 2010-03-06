@@ -1,5 +1,6 @@
 package de.eeriedaily.namqp.v08.types;
 
+import de.eeriedaily.namqp.v08.AbstractTransmittable;
 import org.jboss.netty.buffer.ChannelBuffer;
 
 import java.math.BigInteger;
@@ -8,7 +9,7 @@ import java.util.Date;
 /**
  * @author Joern Barthel <joern.barthel@acm.org>
  */
-public class Timestamp extends AbstractType {
+public class Timestamp extends AbstractTransmittable implements FieldTableValueType {
 
     public static long SIZE = UnsignedLong.SIZE;
     public static final Octet IDENTIFIER = new Octet('T');
@@ -23,8 +24,7 @@ public class Timestamp extends AbstractType {
         this.date = new Date(new UnsignedLong(channelBuffer).getUnsignedLong().longValue());
     }
 
-    @Override
-    public Octet getIdentifier() {
+    public Octet getType() {
         return IDENTIFIER;
     }
 
