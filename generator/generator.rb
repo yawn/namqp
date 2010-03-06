@@ -281,7 +281,7 @@ xml['class'].reject { |c| c['name'] == 'test' }.each do |c|
     method_classname = class_classname + method_name.split('-').map { |e| e.capitalize }.join
     method_index = m['index']
 
-    tree[class_classname] = (tree[class_classname] ||= []) << method_classname if (method_classname.end_with?('Ok'))
+    tree[class_classname] = (tree[class_classname] ||= []) << method_classname if (!method_classname.end_with?('Ok'))
 
     # instance-variable -> type, doc, ...
     types = m['field'] ? m['field'].inject(Dictionary.new) do |a,e|
