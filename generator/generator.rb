@@ -256,9 +256,17 @@ domains = xml['domain'].inject({}) { |a,e| a[e.delete('name')] = e; a }
 
 tree = Dictionary.new
 
-# TODO: documentation and field fixes
+deprecation = {
+  'channel' => [ 'alert' ], 
+  'access' => :all,
+  'file' => :all,
+  'stream' => :all,
+  'dtx' => :all,
+  'tunnel' => :all,
+  'test' => :all
+}
 
-xml['class'].reject { |c| c['name'] == 'test' }.each do |c|
+xml['class'].reject { |c| deprecation[c['name']] == :all }.each do |c|
 
   class_name = c['name']
   path = File.dirname(__FILE__) + "/../src/main/java/#{BASE_PACKAGE.split('.').join('/')}/#{class_name}"
@@ -273,7 +281,9 @@ xml['class'].reject { |c| c['name'] == 'test' }.each do |c|
   
   method_factories = []
   
-  class_methods = c['method'].map do |m|
+  class_methods = c['method'].reject do |m|
+    deprecation[class_name] and deprecation[class_name].include?(m['name'])
+  end.map do |m|
 
     method_name = m['name']
     
