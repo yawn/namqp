@@ -42,9 +42,7 @@ public class FieldTable extends AbstractTransmittable implements FieldTableValue
         while (mapBuffer.readableBytes() > 0) {
 
             ShortString key = new ShortString(mapBuffer);
-            System.out.println("key = " + key);
             FieldTableValueType value = readFieldTableValue(mapBuffer);
-            System.out.println("value = " + value);
 
             if (!map.containsKey(key))
                 map.put(key, value);

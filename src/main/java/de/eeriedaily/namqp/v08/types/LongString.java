@@ -3,6 +3,8 @@ package de.eeriedaily.namqp.v08.types;
 import de.eeriedaily.namqp.v08.AbstractTransmittable;
 import org.jboss.netty.buffer.ChannelBuffer;
 
+import java.nio.charset.Charset;
+
 /**
  * TODO: support large sizes / fetch on demand
  *
@@ -20,8 +22,7 @@ public class LongString extends AbstractTransmittable implements FieldTableValue
 
     public LongString(ChannelBuffer channelBuffer) {
         int size = checkIntOverflow(new UnsignedInt(channelBuffer).getUnsignedInt());
-        System.out.println("size = " + size);
-        this.string = channelBuffer.readBytes(size).toString("utf-8");
+        this.string = channelBuffer.readBytes(size).toString(Charset.forName("utf-8"));
     }
 
     public Octet getType() {

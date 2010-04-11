@@ -10,7 +10,7 @@ import java.math.BigInteger;
  */
 public class UnsignedLong extends AbstractTransmittable implements Type {
 
-    public static final int SIZE = 8;
+    public static final int SIZE = 4;
 
     private final BigInteger unsignedLong;
 

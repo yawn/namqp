@@ -3,6 +3,8 @@ package de.eeriedaily.namqp.v08.types;
 import de.eeriedaily.namqp.v08.AbstractTransmittable;
 import org.jboss.netty.buffer.ChannelBuffer;
 
+import java.nio.charset.Charset;
+
 import static java.lang.String.*;
 
 /**
@@ -11,6 +13,7 @@ import static java.lang.String.*;
 public class ShortString extends AbstractTransmittable implements FieldTableValueType {
 
     public static final Octet IDENTIFIER = new Octet('s');
+    public static final ShortString EMPTY = new ShortString("");
 
     private final String string;
 
@@ -24,7 +27,7 @@ public class ShortString extends AbstractTransmittable implements FieldTableValu
     }
 
     public ShortString(ChannelBuffer channelBuffer) {
-        this(channelBuffer.readBytes(new Octet(channelBuffer).getOctet()).toString("utf-8"));
+        this(channelBuffer.readBytes(new Octet(channelBuffer).getOctet()).toString(Charset.forName("utf-8")));
     }
 
     public String getString() {
