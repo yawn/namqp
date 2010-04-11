@@ -12,7 +12,7 @@ import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
 
 /**
  * Encodes frames into a channel buffer. This encoder is installed by the HandshakeHandler, after sending
- * the initial protocl frame.
+ * the initial protocol frame.
  *
  * @see de.eeriedaily.namqp.v08.handler.HandshakeHandler
  * @see de.eeriedaily.namqp.v08.framing.Frame
