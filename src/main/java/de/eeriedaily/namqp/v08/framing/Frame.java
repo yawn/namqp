@@ -2,23 +2,19 @@ package de.eeriedaily.namqp.v08.framing;
 
 import de.eeriedaily.namqp.v08.AbstractTransmittableContainer;
 import de.eeriedaily.namqp.v08.Transmittable;
-import de.eeriedaily.namqp.v08.framing.FrameBody;
-import de.eeriedaily.namqp.v08.framing.HeartbeatBody;
-import de.eeriedaily.namqp.v08.framing.MethodBody;
-import de.eeriedaily.namqp.v08.framing.UnknownFrameException;
 import de.eeriedaily.namqp.v08.types.Octet;
 import de.eeriedaily.namqp.v08.types.UnsignedInt;
 import de.eeriedaily.namqp.v08.types.UnsignedShort;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelFuture;
-import org.jboss.netty.channel.ChannelHandlerContext;
 
 /**
  * @author Joern Barthel <joern.barthel@acm.org>
  */
 public class Frame extends AbstractTransmittableContainer {
+
+    private static final Log log = LogFactory.getLog(Frame.class);
 
     public static final UnsignedShort ADMIN_CHANNEL = new UnsignedShort(0);
     private static final Octet DELIMITER = new Octet(206);
@@ -40,6 +36,10 @@ public class Frame extends AbstractTransmittableContainer {
         this.frameId = new Octet(buffer);
         this.channel = new UnsignedShort(buffer);
         this.frameBodySize = new UnsignedInt(buffer);
+
+        if (log.isDebugEnabled())
+            log.debug(String.format("Decoding frame '%s' on channel '%s'", frameId, channel));
+
         this.frameBody = newFrameBody(frameId, buffer);
 
         if (!new Octet(buffer).equals(DELIMITER))
@@ -51,6 +51,10 @@ public class Frame extends AbstractTransmittableContainer {
 
         if (frameId.equals(MethodBody.FRAME_ID))
             return new MethodBody(buffer);
+        else if (frameId.equals(ContentHeader.FRAME_ID))
+            return new ContentHeader(buffer);
+        else if (frameId.equals(ContentBody.FRAME_ID))
+            return new ContentBody(buffer);
         else if (frameId.equals(HeartbeatBody.FRAME_ID))
             return new HeartbeatBody();
         else
@@ -68,6 +72,22 @@ public class Frame extends AbstractTransmittableContainer {
 
     public UnsignedInt getFrameBodySize() {
         return frameBodySize;
+    }
+
+    public boolean isContentHeaderFrame() {
+        return getFrameBody() instanceof ContentHeader;
+    }
+
+    public boolean isContentBodyFrame() {
+        return getFrameBody() instanceof ContentBody;
+    }
+
+    public boolean isMethodFrame() {
+        return getFrameBody() instanceof MethodBody;
+    }
+
+    public boolean isHeartbeatFrame() {
+        return getFrameBody() instanceof HeartbeatBody;
     }
 
     @SuppressWarnings({"unchecked"})
