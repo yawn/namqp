@@ -1,4 +1,4 @@
-package de.eeriedaily.namqp.v08.framing;
+package de.eeriedaily.namqp.v08.methods;
 
 import de.eeriedaily.namqp.v08.AMQPException;
 import de.eeriedaily.namqp.v08.ClientException;

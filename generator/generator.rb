@@ -208,8 +208,8 @@ method_factory = proc do
   <<-JAVA
 package de.eeriedaily.namqp.v08.methods;
 
-import de.eeriedaily.namqp.v08.framing.UnknownClassException;
-import de.eeriedaily.namqp.v08.framing.UnknownMethodException;
+import de.eeriedaily.namqp.v08.methods.UnknownClassException;
+import de.eeriedaily.namqp.v08.methods.UnknownMethodException;
 #{tree2imports(tree)}
 import de.eeriedaily.namqp.v08.types.UnsignedShort;
 import org.jboss.netty.buffer.ChannelBuffer;
