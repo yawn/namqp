@@ -247,7 +247,7 @@ typemap = {
   'table' => 'FieldTable',
   'short' => 'UnsignedShort',
   'long' => 'UnsignedLong',
-  'longlong' => 'UnsignedLong',
+  'longlong' => 'UnsignedLongLong',
   'bit' => 'Bit',
   'octet' => 'Octet'
 }
