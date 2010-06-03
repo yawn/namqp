@@ -5,7 +5,6 @@ import de.eeriedaily.namqp.v08.Configuration;
 import de.eeriedaily.namqp.v08.framing.Frame;
 import de.eeriedaily.namqp.v08.framing.MethodBody;
 import de.eeriedaily.namqp.v08.methods.Method;
-import de.eeriedaily.namqp.v08.methods.channel.ChannelOpen;
 import de.eeriedaily.namqp.v08.methods.connection.*;
 import de.eeriedaily.namqp.v08.types.*;
 import org.apache.commons.logging.Log;
@@ -16,14 +15,13 @@ import org.jboss.netty.channel.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static de.eeriedaily.namqp.v08.framing.Frames.methodFrame;
 import static org.jboss.netty.buffer.ChannelBuffers.wrappedBuffer;
 
 /**
  * @author Joern Barthel <joern.barthel@acm.org>
  */
 @ChannelHandler.Sharable
-public class HandshakeHandler extends SimpleChannelUpstreamHandler {
+public class HandshakeHandler extends AbstractFrameUpstreamHandler {
 
     public class HandshakeSequenceDeviationException extends ClientException {
 
@@ -45,13 +43,15 @@ public class HandshakeHandler extends SimpleChannelUpstreamHandler {
     private static final Log log = LogFactory.getLog(HandshakeHandler.class);
 
     private final Configuration configuration;
+    private final de.eeriedaily.namqp.v08.handler.channel.Channel adminChannel;
 
-    public HandshakeHandler(Configuration configuration) {
+    public HandshakeHandler(Configuration configuration, de.eeriedaily.namqp.v08.handler.channel.Channel adminChannel) {
         this.configuration = configuration;
+        this.adminChannel = adminChannel;
     }
 
     @Override
-    public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+    public void channelConnected(final ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
 
         if (log.isDebugEnabled())
             log.debug("Sending AMQP protocol frame");
@@ -59,16 +59,21 @@ public class HandshakeHandler extends SimpleChannelUpstreamHandler {
         ChannelBuffer header = wrappedBuffer(new byte[]{'A', 'M', 'Q', 'P',
                 1, 1, 8, 0});
 
-        ctx.getChannel().write(header).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+        ctx.getChannel().write(header).addListener(new ChannelFutureListener() {
 
-        new FrameEncoder(ctx.getPipeline());
+            public void operationComplete(ChannelFuture future) throws Exception {
+
+                if (log.isDebugEnabled())
+                    log.debug("AMQP protocol frame sent, waiting for connection.start");
+
+            }
+
+        });
 
     }
 
     @Override
-    public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-
-        Frame frame = (Frame) e.getMessage();
+    public void frameReceived(Frame frame, ChannelHandlerContext ctx, MessageEvent e) {
 
         MethodBody body = frame.getFrameBody();
         Method method = body.getMethod();
@@ -101,10 +106,10 @@ public class HandshakeHandler extends SimpleChannelUpstreamHandler {
 
         FieldTable loginFT = new FieldTable(login);
 
-        write(ctx, methodFrame(new ConnectionStartOk(new FieldTable(p),
+        adminChannel.write(new ConnectionStartOk(new FieldTable(p),
                 new ShortString("AMQPLAIN"),
                 loginFT,
-                new ShortString("en_US"))));
+                new ShortString("en_US")));
 
     }
 
@@ -113,9 +118,9 @@ public class HandshakeHandler extends SimpleChannelUpstreamHandler {
         if (log.isDebugEnabled())
             log.debug("Sending 'connection.tune-ok'");
 
-        write(ctx, methodFrame(new ConnectionTuneOk(method.getChannelMax(),
+        adminChannel.write(new ConnectionTuneOk(method.getChannelMax(),
                 method.getFrameMax(),
-                new UnsignedShort(configuration.getHeartbeat())))).addListener(new ChannelFutureListener() {
+                new UnsignedShort(configuration.getHeartbeat()))).addListener(new ChannelFutureListener() {
 
             public void operationComplete(ChannelFuture future) throws Exception {
                 connectionOpen(ctx);
@@ -130,9 +135,9 @@ public class HandshakeHandler extends SimpleChannelUpstreamHandler {
         if (log.isDebugEnabled())
             log.debug("Sending 'connection.open'");
 
-        write(ctx, methodFrame(new ConnectionOpen(new ShortString(configuration.getVirtualHost()),
+        adminChannel.write(new ConnectionOpen(new ShortString(configuration.getVirtualHost()),
                 new ShortString(""),
-                new Bit(true)))).addListener(new ChannelFutureListener() {
+                new Bit(true))).addListener(new ChannelFutureListener() {
 
             public void operationComplete(ChannelFuture future) throws Exception {
                 handshakeComplete(ctx);
@@ -150,10 +155,6 @@ public class HandshakeHandler extends SimpleChannelUpstreamHandler {
         // handshake complete, remove handler from handler
         ctx.getPipeline().remove(this);
 
-    }
-
-    protected ChannelFuture write(ChannelHandlerContext ctx, Frame frame) {
-        return ctx.getChannel().write(frame);
     }
 
 }
