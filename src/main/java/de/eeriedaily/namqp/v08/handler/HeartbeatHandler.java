@@ -3,10 +3,12 @@ package de.eeriedaily.namqp.v08.handler;
 import de.eeriedaily.namqp.v08.ClientException;
 import de.eeriedaily.namqp.v08.Configuration;
 import de.eeriedaily.namqp.v08.framing.Frame;
-import de.eeriedaily.namqp.v08.framing.HeartbeatBody;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.netty.channel.*;
+import org.jboss.netty.channel.ChannelHandler;
+import org.jboss.netty.channel.ChannelHandlerContext;
+import org.jboss.netty.channel.ChannelStateEvent;
+import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.util.HashedWheelTimer;
 import org.jboss.netty.util.Timeout;
 import org.jboss.netty.util.TimerTask;
@@ -19,7 +21,7 @@ import static de.eeriedaily.namqp.v08.framing.Frames.heartbeatFrame;
  * @author Joern Barthel <joern.barthel@acm.org>
  */
 @ChannelHandler.Sharable
-public class HeartbeatHandler extends SimpleChannelUpstreamHandler {
+public class HeartbeatHandler extends AbstractFrameUpstreamHandler {
 
     public class MissedHeartbeatException extends ClientException {
     }
@@ -38,8 +40,12 @@ public class HeartbeatHandler extends SimpleChannelUpstreamHandler {
 
     @Override
     public void channelBound(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-        startTimer();
+
+        if (configuration.getHeartbeat() > 0)
+            startTimer();
+
         ctx.sendUpstream(e);
+    
     }
 
     protected void startTimer() {
@@ -61,11 +67,9 @@ public class HeartbeatHandler extends SimpleChannelUpstreamHandler {
     }
 
     @Override
-    public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
+    public void frameReceived(Frame frame, ChannelHandlerContext ctx, MessageEvent e) {
 
-        Frame message = (Frame) e.getMessage();
-
-        if (message.getFrameBody() instanceof HeartbeatBody) {
+        if (frame.isHeartbeatFrame()) {
 
             startTimer();
 
