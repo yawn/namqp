@@ -40,21 +40,21 @@ public class Frame extends AbstractTransmittableContainer {
         if (log.isDebugEnabled())
             log.debug(String.format("Decoding frame '%s' on channel '%s'", frameId, channel));
 
-        this.frameBody = newFrameBody(frameId, buffer);
+        this.frameBody = newFrameBody(frameId, frameBodySize, buffer);
 
         if (!new Octet(buffer).equals(DELIMITER))
             throw new MissingFrameDelimiter(buffer);
 
     }
 
-    protected static FrameBody newFrameBody(Octet frameId, ChannelBuffer buffer) {
+    protected static FrameBody newFrameBody(Octet frameId, UnsignedInt frameBodySize, ChannelBuffer buffer) {
 
         if (frameId.equals(MethodBody.FRAME_ID))
             return new MethodBody(buffer);
         else if (frameId.equals(ContentHeader.FRAME_ID))
             return new ContentHeader(buffer);
         else if (frameId.equals(ContentBody.FRAME_ID))
-            return new ContentBody(buffer);
+            return new ContentBody(buffer.readBytes((int) frameBodySize.getUnsignedInt()));
         else if (frameId.equals(HeartbeatBody.FRAME_ID))
             return new HeartbeatBody();
         else
