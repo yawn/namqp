@@ -1,0 +1,21 @@
+h1. Introduction
+
+nampq is a low-level driver for AMQP using the "NIO":http://en.wikipedia.org/wiki/New_I/O framework "netty":http://www.jboss.org/netty. Currently it supports all non-deprecated AMQP 0-8 operations and targets RabbitMQ as a broker. 
+
+h2. What it is / isn't / could be 
+
+* It's basic and lowlevel (read: there is no API, just the protocol handling is in place).
+* It's simple and (hopefully) easy to understand.
+* I have not (yet) used it in production.
+* Due to the stack ripping inherent to (most) evented architectures the resulting programs might not be as intuititive as synchronous implementations - your mileage may vary.
+* There is no error handling that deserves it's name in place yet.
+* Forks welcome!
+
+h2. Next steps
+
+* Write an API.
+* Change the typebase to ChannelBuffer instead of Java types.
+
+h2. Example usage
+
+See http://github.com/yawn/namqp/blob/master/src/main/java/de/eeriedaily/namqp/v08/Example.java.
