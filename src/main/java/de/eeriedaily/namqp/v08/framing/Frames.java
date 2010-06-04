@@ -5,9 +5,9 @@ package de.eeriedaily.namqp.v08.framing;
  */
 public final class Frames {
 
-    private static final Frame HEARTBEAT_FRAME = new Frame(HeartbeatBody.FRAME_ID,
+    private static final Frame HEARTBEAT_FRAME = new Frame(HeartbeatPayload.FRAME_ID,
                 Frame.ADMIN_CHANNEL,
-                new HeartbeatBody());
+                new HeartbeatPayload());
 
     private Frames() {
     }

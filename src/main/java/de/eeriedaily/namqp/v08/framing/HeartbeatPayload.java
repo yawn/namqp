@@ -6,7 +6,7 @@ import org.jboss.netty.buffer.ChannelBuffer;
 /**
  * @author Joern Barthel <joern.barthel@acm.org>
  */
-public class HeartbeatBody implements FrameBody {
+public class HeartbeatPayload implements Payload {
 
     public static final Octet FRAME_ID = new Octet(8);
     public static final int SIZE = 0;

@@ -2,7 +2,6 @@ package de.eeriedaily.namqp.v08.framing;
 
 import de.eeriedaily.namqp.v08.AbstractTransmittableContainer;
 import de.eeriedaily.namqp.v08.Transmittable;
-import de.eeriedaily.namqp.v08.methods.basic.Basic;
 import de.eeriedaily.namqp.v08.methods.basic.BasicProperty;
 import de.eeriedaily.namqp.v08.types.PropertyList;
 import de.eeriedaily.namqp.v08.types.Octet;
@@ -13,7 +12,7 @@ import org.jboss.netty.buffer.ChannelBuffer;
 /**
  * @author Joern Barthel <joern.barthel@acm.org>
  */
-public class ContentHeader extends AbstractTransmittableContainer implements FrameBody {
+public class ContentHeaderPayload extends AbstractTransmittableContainer implements Payload {
 
     public static final Octet FRAME_ID = new Octet(2);
 
@@ -22,7 +21,7 @@ public class ContentHeader extends AbstractTransmittableContainer implements Fra
     private final UnsignedLongLong bodySize;
     private final PropertyList propertyList;
 
-    public ContentHeader(ChannelBuffer buffer) {
+    public ContentHeaderPayload(ChannelBuffer buffer) {
 
         this.classId = new UnsignedShort(buffer);
         this.weight = new UnsignedShort(buffer);
@@ -54,7 +53,7 @@ public class ContentHeader extends AbstractTransmittableContainer implements Fra
 
     @Override
     public String toString() {
-        return "ContentHeader{" +
+        return "ContentHeaderPayload{" +
                 "bodySize=" + bodySize +
                 ", classId=" + classId +
                 ", weight=" + weight +

@@ -12,11 +12,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.MessageEvent;
 
 import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.Queue;
@@ -44,7 +42,7 @@ public class Channel implements FrameUpstreamHandler {
 
             });
 
-    private volatile ContentHeader lastContentHeader;
+    private volatile ContentHeaderPayload lastContentHeaderPayload;
 
     public Channel(UnsignedShort channel, ChannelDelegation channelDelegation) {
         this.channel = channel;
@@ -58,7 +56,7 @@ public class Channel implements FrameUpstreamHandler {
 
         if (frame.isMethodFrame()) {
 
-            MethodBody payload = frame.getFrameBody();
+            MethodPayload payload = frame.getPayload();
             Method method = payload.getMethod();
 
             Reference<ValueFuture<Method>> futureReference;
@@ -74,12 +72,12 @@ public class Channel implements FrameUpstreamHandler {
 
         } else if (frame.isContentHeaderFrame()) {
 
-            lastContentHeader = frame.getFrameBody();
+            lastContentHeaderPayload = frame.getPayload();
 
         } else if (frame.isContentBodyFrame()) {
 
-            ContentBody payload = frame.getFrameBody();
-            Content content = new Content(lastContentHeader, payload);
+            ContentBodyPayload bodyPayload = frame.getPayload();
+            Content content = new Content(lastContentHeaderPayload, bodyPayload);
 
             for (Reference<ContentListener> reference : contentListeners) {
 
@@ -107,7 +105,7 @@ public class Channel implements FrameUpstreamHandler {
 
     }
 
-    public ChannelFuture write(FrameBody payload) {
+    public ChannelFuture write(Payload payload) {
 
         Frame frame = new Frame(payload.getFrameId(),
                 channel,
@@ -118,10 +116,10 @@ public class Channel implements FrameUpstreamHandler {
     }
 
     public ChannelFuture write(Method payload) {
-        return write(new MethodBody(payload));
+        return write(new MethodPayload(payload));
     }
 
-    public <T extends Method> ListenableFuture<T> write(FrameBody payload, Class<T> method) {
+    public <T extends Method> ListenableFuture<T> write(Payload payload, Class<T> method) {
 
         ListenableFuture<T> future = addMethodListener(method);
         write(payload);
@@ -131,7 +129,7 @@ public class Channel implements FrameUpstreamHandler {
     }
 
     public <T extends Method> ListenableFuture<T> write(Method payload, Class<T> method) {
-        return write(new MethodBody(payload), method);
+        return write(new MethodPayload(payload), method);
     }
 
 }

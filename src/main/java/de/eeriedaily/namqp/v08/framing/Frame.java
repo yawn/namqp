@@ -21,42 +21,42 @@ public class Frame extends AbstractTransmittableContainer {
 
     private final Octet frameId;
     private final UnsignedShort channel;
-    private final UnsignedInt frameBodySize;
-    private final FrameBody frameBody;
+    private final UnsignedInt payloadSize;
+    private final Payload payload;
 
-    public Frame(Octet frameId, UnsignedShort channel, FrameBody frameBody) {
+    public Frame(Octet frameId, UnsignedShort channel, Payload payload) {
         this.frameId = frameId;
         this.channel = channel;
-        this.frameBodySize = new UnsignedInt(frameBody.getSize());
-        this.frameBody = frameBody;
+        this.payloadSize = new UnsignedInt(payload.getSize());
+        this.payload = payload;
     }
 
     public Frame(ChannelBuffer buffer) {
 
         this.frameId = new Octet(buffer);
         this.channel = new UnsignedShort(buffer);
-        this.frameBodySize = new UnsignedInt(buffer);
+        this.payloadSize = new UnsignedInt(buffer);
 
         if (log.isDebugEnabled())
             log.debug(String.format("Decoding frame '%s' on channel '%s'", frameId, channel));
 
-        this.frameBody = newFrameBody(frameId, frameBodySize, buffer);
+        this.payload = newPayload(frameId, payloadSize, buffer);
 
         if (!new Octet(buffer).equals(DELIMITER))
             throw new MissingFrameDelimiter(buffer);
 
     }
 
-    protected static FrameBody newFrameBody(Octet frameId, UnsignedInt frameBodySize, ChannelBuffer buffer) {
+    protected static Payload newPayload(Octet frameId, UnsignedInt payloadSize, ChannelBuffer buffer) {
 
-        if (frameId.equals(MethodBody.FRAME_ID))
-            return new MethodBody(buffer);
-        else if (frameId.equals(ContentHeader.FRAME_ID))
-            return new ContentHeader(buffer);
-        else if (frameId.equals(ContentBody.FRAME_ID))
-            return new ContentBody(buffer.readBytes((int) frameBodySize.getUnsignedInt()));
-        else if (frameId.equals(HeartbeatBody.FRAME_ID))
-            return new HeartbeatBody();
+        if (frameId.equals(MethodPayload.FRAME_ID))
+            return new MethodPayload(buffer);
+        else if (frameId.equals(ContentHeaderPayload.FRAME_ID))
+            return new ContentHeaderPayload(buffer);
+        else if (frameId.equals(ContentBodyPayload.FRAME_ID))
+            return new ContentBodyPayload(buffer.readBytes((int) payloadSize.getUnsignedInt()));
+        else if (frameId.equals(HeartbeatPayload.FRAME_ID))
+            return new HeartbeatPayload();
         else
             throw new UnknownFrameException(frameId);
 
@@ -70,34 +70,34 @@ public class Frame extends AbstractTransmittableContainer {
         return channel;
     }
 
-    public UnsignedInt getFrameBodySize() {
-        return frameBodySize;
+    public UnsignedInt getPayloadSize() {
+        return payloadSize;
     }
 
     public boolean isContentHeaderFrame() {
-        return getFrameBody() instanceof ContentHeader;
+        return getPayload() instanceof ContentHeaderPayload;
     }
 
     public boolean isContentBodyFrame() {
-        return getFrameBody() instanceof ContentBody;
+        return getPayload() instanceof ContentBodyPayload;
     }
 
     public boolean isMethodFrame() {
-        return getFrameBody() instanceof MethodBody;
+        return getPayload() instanceof MethodPayload;
     }
 
     public boolean isHeartbeatFrame() {
-        return getFrameBody() instanceof HeartbeatBody;
+        return getPayload() instanceof HeartbeatPayload;
     }
 
     @SuppressWarnings({"unchecked"})
-    public <T extends FrameBody> T getFrameBody() {
-        return (T) frameBody;
+    public <T extends Payload> T getPayload() {
+        return (T) payload;
     }
 
     @Override
     protected Transmittable[] getTransmittables() {
-        return all(frameId, channel, frameBodySize, frameBody, DELIMITER);
+        return all(frameId, channel, payloadSize, payload, DELIMITER);
     }
 
     @Override
@@ -105,8 +105,8 @@ public class Frame extends AbstractTransmittableContainer {
         return "Frame{" +
                 "channel=" + channel +
                 ", frameId=" + frameId +
-                ", frameBodySize=" + frameBodySize +
-                ", frameBody=" + frameBody +
+                ", payloadSize=" + payloadSize +
+                ", payload=" + payload +
                 "} " + super.toString();
     }
     

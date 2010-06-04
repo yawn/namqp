@@ -9,13 +9,13 @@ import static org.jboss.netty.buffer.ChannelBuffers.*;
 /**
  * @author Joern Barthel <joern.barthel@acm.org>
  */
-public class ContentBody extends AbstractTransmittable implements FrameBody {
+public class ContentBodyPayload extends AbstractTransmittable implements Payload {
 
     public static final Octet FRAME_ID = new Octet(3);
 
     private final ChannelBuffer content;
 
-    public ContentBody(ChannelBuffer channelBuffer) {
+    public ContentBodyPayload(ChannelBuffer channelBuffer) {
         this.content = unmodifiableBuffer(wrappedBuffer(channelBuffer));
     }
 

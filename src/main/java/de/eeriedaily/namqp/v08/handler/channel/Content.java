@@ -1,27 +1,27 @@
 package de.eeriedaily.namqp.v08.handler.channel;
 
-import de.eeriedaily.namqp.v08.framing.ContentBody;
-import de.eeriedaily.namqp.v08.framing.ContentHeader;
+import de.eeriedaily.namqp.v08.framing.ContentBodyPayload;
+import de.eeriedaily.namqp.v08.framing.ContentHeaderPayload;
 
 /**
  * @author Joern Barthel <joern.barthel@acm.org>
  */
 public class Content {
 
-    private final ContentHeader contentHeader;
-    private final ContentBody contentBody;
+    private final ContentHeaderPayload contentHeaderPayload;
+    private final ContentBodyPayload contentBodyPayload;
 
-    public Content(ContentHeader contentHeader, ContentBody contentBody) {
-        this.contentBody = contentBody;
-        this.contentHeader = contentHeader;
+    public Content(ContentHeaderPayload contentHeaderPayload, ContentBodyPayload contentBodyPayload) {
+        this.contentBodyPayload = contentBodyPayload;
+        this.contentHeaderPayload = contentHeaderPayload;
     }
 
-    public ContentBody getContentBody() {
-        return contentBody;
+    public ContentBodyPayload getContentBody() {
+        return contentBodyPayload;
     }
 
-    public ContentHeader getContentHeader() {
-        return contentHeader;
+    public ContentHeaderPayload getContentHeader() {
+        return contentHeaderPayload;
     }
 
     @Override
@@ -31,24 +31,24 @@ public class Content {
 
         Content content = (Content) o;
 
-        if (!contentBody.equals(content.contentBody)) return false;
-        if (!contentHeader.equals(content.contentHeader)) return false;
+        if (!contentBodyPayload.equals(content.contentBodyPayload)) return false;
+        if (!contentHeaderPayload.equals(content.contentHeaderPayload)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = contentHeader.hashCode();
-        result = 31 * result + contentBody.hashCode();
+        int result = contentHeaderPayload.hashCode();
+        result = 31 * result + contentBodyPayload.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
         return "Content{" +
-                "contentBody=" + contentBody +
-                ", contentHeader=" + contentHeader +
+                "contentBodyPayload=" + contentBodyPayload +
+                ", contentHeaderPayload=" + contentHeaderPayload +
                 '}';
     }
     

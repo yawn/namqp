@@ -3,7 +3,7 @@ package de.eeriedaily.namqp.v08.handler;
 import de.eeriedaily.namqp.v08.ClientException;
 import de.eeriedaily.namqp.v08.Configuration;
 import de.eeriedaily.namqp.v08.framing.Frame;
-import de.eeriedaily.namqp.v08.framing.MethodBody;
+import de.eeriedaily.namqp.v08.framing.MethodPayload;
 import de.eeriedaily.namqp.v08.methods.Method;
 import de.eeriedaily.namqp.v08.methods.connection.*;
 import de.eeriedaily.namqp.v08.types.*;
@@ -75,8 +75,8 @@ public class HandshakeHandler extends AbstractFrameUpstreamHandler {
     @Override
     public void frameReceived(Frame frame, ChannelHandlerContext ctx, MessageEvent e) {
 
-        MethodBody body = frame.getFrameBody();
-        Method method = body.getMethod();
+        MethodPayload payload = frame.getPayload();
+        Method method = payload.getMethod();
 
         if (log.isDebugEnabled())
             log.debug(String.format("Receiving '%s'", method.getMethodClassAndMethodName()));

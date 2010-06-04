@@ -1,6 +1,6 @@
 package de.eeriedaily.namqp.v08;
 
-import de.eeriedaily.namqp.v08.framing.MethodBody;
+import de.eeriedaily.namqp.v08.framing.MethodPayload;
 import de.eeriedaily.namqp.v08.handler.channel.Channel;
 import de.eeriedaily.namqp.v08.handler.channel.Content;
 import de.eeriedaily.namqp.v08.handler.channel.ContentListener;
@@ -53,7 +53,7 @@ public class Example {
         response = channel_1.write(new ChannelOpen(ShortString.EMPTY), ChannelOpenOk.class).get();
         System.out.println("response = " + response);
 
-        response = channel_1.write(new MethodBody(new QueueDeclare(UnsignedShort.valueOf(0),
+        response = channel_1.write(new MethodPayload(new QueueDeclare(UnsignedShort.valueOf(0),
                 new ShortString("my_queue"),
                 new Bit(false),
                 new Bit(false),

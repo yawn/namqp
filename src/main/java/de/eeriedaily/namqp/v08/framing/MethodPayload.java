@@ -11,7 +11,7 @@ import org.jboss.netty.buffer.ChannelBuffer;
 /**
  * @author Joern Barthel <joern.barthel@acm.org>
  */
-public class MethodBody extends AbstractTransmittableContainer implements FrameBody {
+public class MethodPayload extends AbstractTransmittableContainer implements Payload {
 
     public static final Octet FRAME_ID = new Octet(1);
 
@@ -19,13 +19,13 @@ public class MethodBody extends AbstractTransmittableContainer implements FrameB
     private final UnsignedShort methodId;
     private final Method method;
 
-    public MethodBody(Method method) {
+    public MethodPayload(Method method) {
         this.classId = method.getMethodClassId();
         this.methodId = method.getMethodMethodId();
         this.method = method;
     }
 
-    public MethodBody(ChannelBuffer channelBuffer) {
+    public MethodPayload(ChannelBuffer channelBuffer) {
         this.classId = new UnsignedShort(channelBuffer);
         this.methodId = new UnsignedShort(channelBuffer);
         this.method = MethodFactory.get(classId, methodId, channelBuffer);
@@ -47,7 +47,7 @@ public class MethodBody extends AbstractTransmittableContainer implements FrameB
 
     @Override
     public String toString() {
-        return "MethodBody{" +
+        return "MethodPayload{" +
                 "classId=" + classId +
                 ", methodId=" + methodId +
                 ", method=" + method +
