@@ -18,4 +18,4 @@ h2. Next steps
 
 h2. Example usage
 
-See http://github.com/yawn/namqp/blob/master/src/main/java/de/eeriedaily/namqp/v08/Example.java.
+See "here":http://github.com/yawn/namqp/blob/master/src/main/java/de/eeriedaily/namqp/v08/Example.java.
