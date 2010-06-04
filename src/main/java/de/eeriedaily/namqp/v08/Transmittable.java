@@ -7,7 +7,7 @@ import org.jboss.netty.buffer.ChannelBuffer;
  */
 public interface Transmittable {
 
-    public long getSize();
+    public int getSize();
 
     public void writeTo(ChannelBuffer channelBuffer);
 

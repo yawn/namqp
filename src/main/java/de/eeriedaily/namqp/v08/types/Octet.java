@@ -8,7 +8,7 @@ import org.jboss.netty.buffer.ChannelBuffer;
  */
 public class Octet extends AbstractTransmittable implements Type {
 
-    public static final long SIZE = 1;
+    public static final int SIZE = 1;
 
     private final byte octet;
 
@@ -47,7 +47,7 @@ public class Octet extends AbstractTransmittable implements Type {
         return octet;
     }
 
-    public long getSize() {
+    public int getSize() {
         return SIZE;
     }
 

@@ -2,7 +2,6 @@ package de.eeriedaily.namqp.v08.types;
 
 import de.eeriedaily.namqp.v08.AbstractTransmittable;
 import org.jboss.netty.buffer.ChannelBuffer;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
  */
 public class BitField extends AbstractTransmittable implements Type {
 
-    public static final long SIZE = 1;
+    public static final int SIZE = 1;
 
     private final List<Bit> bits;
 
@@ -32,7 +31,7 @@ public class BitField extends AbstractTransmittable implements Type {
         return b |= (bit ? 1 : 0) << idx;
     }
 
-    public long getSize() {
+    public int getSize() {
         return SIZE;
     }
 

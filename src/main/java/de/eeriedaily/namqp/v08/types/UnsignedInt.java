@@ -8,12 +8,12 @@ import org.jboss.netty.buffer.ChannelBuffer;
  */
 public class UnsignedInt extends AbstractTransmittable implements Type {
 
-    public static final long SIZE = 4;
+    public static final int SIZE = 4;
 
-    private final long unsignedInt;
+    private final int unsignedInt;
 
     public UnsignedInt(long unsignedInt) {
-        this.unsignedInt = unsignedInt;
+        this.unsignedInt = (int) unsignedInt;
     }
 
     public UnsignedInt(ChannelBuffer channelBuffer) {
@@ -24,7 +24,7 @@ public class UnsignedInt extends AbstractTransmittable implements Type {
         return unsignedInt;
     }
 
-    public long getSize() {
+    public int getSize() {
         return SIZE;
     }
 

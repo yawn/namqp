@@ -36,7 +36,7 @@ public class FieldTable extends AbstractTransmittable implements FieldTableValue
 
         map = new LinkedHashMap<ShortString, FieldTableValueType>();
 
-        int size = checkIntOverflow(new UnsignedInt(channelBuffer).getUnsignedInt());
+        int size = (int) new UnsignedInt(channelBuffer).getUnsignedInt();
         ChannelBuffer mapBuffer = channelBuffer.readBytes(size);
 
         while (mapBuffer.readableBytes() > 0) {
@@ -74,9 +74,9 @@ public class FieldTable extends AbstractTransmittable implements FieldTableValue
         return IDENTIFIER;
     }
 
-    public long getSize() {
+    public int getSize() {
 
-        long size = UnsignedInt.SIZE;
+        int size = UnsignedInt.SIZE;
 
         for (Map.Entry<ShortString, FieldTableValueType> e : map.entrySet())
             size += e.getKey().getSize() + e.getValue().getType().getSize() + e.getValue().getSize();

@@ -31,7 +31,7 @@ public class FrameEncoder extends OneToOneEncoder {
         if (log.isDebugEnabled())
             log.debug(String.format("Encoding frame '%s' into channel buffer", frame));
 
-        ChannelBuffer buffer = ChannelBuffers.buffer(frame.getSizeAsInt());
+        ChannelBuffer buffer = ChannelBuffers.buffer(frame.getSize());
         frame.writeTo(buffer);
 
         return buffer;

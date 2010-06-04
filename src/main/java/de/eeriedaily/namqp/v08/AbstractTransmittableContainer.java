@@ -13,12 +13,8 @@ public abstract class AbstractTransmittableContainer extends AbstractTransmittab
 
     protected abstract Transmittable[] getTransmittables();
 
-    public long getSize() {
+    public int getSize() {
         return sizeOf(getTransmittables());
-    }
-
-    public int getSizeAsInt() {
-        return checkIntOverflow(getSize());
     }
 
     public void writeTo(ChannelBuffer channelBuffer) {

@@ -38,7 +38,7 @@ public class ShortString extends AbstractTransmittable implements FieldTableValu
         return IDENTIFIER;
     }
 
-    public long getSize() {
+    public int getSize() {
         return Octet.SIZE + string.length();
     }
 

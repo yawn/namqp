@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class UnsignedShort extends AbstractTransmittable implements Type {
 
-    public static final long SIZE = 2;
+    public static final int SIZE = 2;
 
     private final int unsignedShort;
 
@@ -42,7 +42,7 @@ public class UnsignedShort extends AbstractTransmittable implements Type {
         return unsignedShort;
     }
 
-    public long getSize() {
+    public int getSize() {
         return SIZE;
     }
 

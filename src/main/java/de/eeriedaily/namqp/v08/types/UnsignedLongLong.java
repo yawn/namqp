@@ -35,7 +35,7 @@ public class UnsignedLongLong extends AbstractTransmittable implements Type {
         return unsignedLongLong;
     }
 
-    public long getSize() {
+    public int getSize() {
         return SIZE;
     }
 

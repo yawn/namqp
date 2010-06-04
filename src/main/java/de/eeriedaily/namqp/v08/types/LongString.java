@@ -21,7 +21,7 @@ public class LongString extends AbstractTransmittable implements FieldTableValue
     }
 
     public LongString(ChannelBuffer channelBuffer) {
-        int size = checkIntOverflow(new UnsignedInt(channelBuffer).getUnsignedInt());
+        int size = (int) new UnsignedInt(channelBuffer).getUnsignedInt();
         this.string = channelBuffer.readBytes(size).toString(Charset.forName("utf-8"));
     }
 
@@ -29,7 +29,7 @@ public class LongString extends AbstractTransmittable implements FieldTableValue
         return IDENTIFIER;
     }
 
-    public long getSize() {
+    public int getSize() {
         return UnsignedInt.SIZE + string.length();
     }
 

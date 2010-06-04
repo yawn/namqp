@@ -15,7 +15,7 @@ public class HeartbeatPayload implements Payload {
         return FRAME_ID;
     }
 
-    public long getSize() {
+    public int getSize() {
         return SIZE;
     }
 

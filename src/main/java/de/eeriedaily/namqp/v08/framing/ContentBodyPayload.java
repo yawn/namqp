@@ -27,7 +27,7 @@ public class ContentBodyPayload extends AbstractTransmittable implements Payload
         return FRAME_ID;
     }
 
-    public long getSize() {
+    public int getSize() {
         return content.readableBytes();
     }
 

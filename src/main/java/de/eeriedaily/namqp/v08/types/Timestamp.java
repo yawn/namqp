@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class Timestamp extends AbstractTransmittable implements FieldTableValueType {
 
-    public static long SIZE = UnsignedLong.SIZE;
+    public static int SIZE = UnsignedLong.SIZE;
     public static final Octet IDENTIFIER = new Octet('T');
 
     private final Date date;
@@ -28,7 +28,7 @@ public class Timestamp extends AbstractTransmittable implements FieldTableValueT
         return IDENTIFIER;
     }
 
-    public long getSize() {
+    public int getSize() {
         return SIZE;
     }
 
